@@ -5,16 +5,44 @@
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
   root.init = function() {
-    var background, stage, tower;
+    var background, canvHeight, canvWidth, circle, cursor, cursorRadius, radius, stage, tick, tower;
+    canvWidth = 600;
+    canvHeight = 600;
+    radius = 80;
+    cursorRadius = 3;
     stage = new createjs.Stage("game-canvas");
+    createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener("tick", stage);
+    createjs.Ticker.addEventListener("tick", tick);
     background = new createjs.Shape();
-    background.graphics.beginFill("#39AD50").drawRect(0, 0, 600, 600);
+    background.graphics.beginFill("#39AD50").drawRect(0, 0, canvWidth, canvHeight);
     stage.addChild(background);
     tower = new createjs.Bitmap("images/tower2.png");
-    tower.x = 250;
-    tower.y = 230;
-    return stage.addChild(tower);
+    tower.x = 260;
+    tower.y = 232;
+    stage.addChild(tower);
+    circle = new createjs.Shape();
+    circle.graphics.setStrokeStyle(1).beginStroke("red").drawCircle(canvWidth / 2, canvHeight / 2, radius);
+    stage.addChild(circle);
+    cursor = new createjs.Shape();
+    cursor.graphics.beginFill("red").drawCircle(canvWidth / 2, canvHeight / 2 + radius, cursorRadius);
+    stage.addChild(cursor);
+    function tick(event) {
+      var delta;
+      delta = 3;
+      if (key.isPressed('w')) {
+        cursor.y -= delta;
+      }
+      if (key.isPressed('s')) {
+        cursor.y += delta;
+      }
+      if (key.isPressed('a')) {
+        cursor.x -= delta;
+      }
+      if (key.isPressed('d')) {
+        cursor.x += delta;
+      }
+    };
   };
 
 }).call(this);
